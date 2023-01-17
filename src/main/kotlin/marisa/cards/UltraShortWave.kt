@@ -33,16 +33,9 @@ class UltraShortWave : CustomCard(
     override fun applyPowers() {}
     override fun calculateCardDamage(unused: AbstractMonster?) {}
     override fun use(p: AbstractPlayer, unused: AbstractMonster?) {
-        addToBot(
-            GainEnergyAction(block)
-        )
-        addToBot(
-            ApplyPowerAction(
-                p,
-                p,
-                ChargeUpPower(p, magicNumber),
-                magicNumber
-            )
+        marisa.addToBot(
+            GainEnergyAction(block),
+            ApplyPowerAction(p, p, ChargeUpPower(p, magicNumber))
         )
         upgradeMagicNumber(damage)
         upgradeBlock(1)
