@@ -22,23 +22,33 @@ class UltraShortWave : CustomCard(
     CardTarget.SELF
 ) {
     init {
-        baseMagicNumber = GAIN
-        magicNumber = baseMagicNumber
-        baseBlock = ENERGY
+        baseBlock = BASE_ENERGY
         block = baseBlock
-        baseDamage = GROW
+
+        baseMagicNumber = BASE_CHARGE
+        magicNumber = baseMagicNumber
+
+        baseDamage = BASE_CHARGE_GROWTH
         damage = baseDamage
     }
+
+    private val energy by ::block
+    private val increaseEnergy = ::upgradeBlock
+
+    private val charge by ::magicNumber
+    private val increaseCharge = ::upgradeMagicNumber
+
+    private val chargeGrowth by ::damage
+    private val increaseChargeGrowth = ::upgradeDamage
 
     override fun applyPowers() {}
     override fun calculateCardDamage(unused: AbstractMonster?) {}
     override fun use(p: AbstractPlayer, unused: AbstractMonster?) {
-        marisa.addToBot(
-            GainEnergyAction(block),
-            ApplyPowerAction(p, p, ChargeUpPower(p, magicNumber))
-        )
-        upgradeMagicNumber(damage)
-        upgradeBlock(1)
+        addToBot(GainEnergyAction(energy))
+        increaseEnergy(1)
+
+        addToBot(ApplyPowerAction(p, p, ChargeUpPower(p, charge)))
+        increaseCharge(chargeGrowth)
     }
 
     override fun makeCopy(): AbstractCard = UltraShortWave()
@@ -46,7 +56,7 @@ class UltraShortWave : CustomCard(
     override fun upgrade() {
         if (!upgraded) {
             upgradeName()
-            upgradeDamage(GAIN_GROW)
+            increaseChargeGrowth(GAIN_CHARGE_GROWTH)
         }
     }
 
@@ -57,9 +67,9 @@ class UltraShortWave : CustomCard(
         val NAME = cardStrings.NAME
         val DESCRIPTION = cardStrings.DESCRIPTION
         private const val COST = 1
-        private const val GAIN = 1
-        private const val GROW = 1
-        private const val GAIN_GROW = 1
-        private const val ENERGY = 1
+        private const val BASE_CHARGE = 1
+        private const val BASE_CHARGE_GROWTH = 1
+        private const val GAIN_CHARGE_GROWTH = 1
+        private const val BASE_ENERGY = 1
     }
 }
