@@ -30,6 +30,8 @@ BODY = "\n".join(CHANGELOG_TEXT.splitlines()[2:])
 JAR = zipfile.Path("build/libs/MarisaContinued.jar")
 MODINFO = JAR / "ModTheSpire.json"
 
+STS = Path("/home/scarf/.steam/steam/steamapps/common/SlayTheSpire")
+
 
 @dataclass
 class Context:
@@ -67,9 +69,7 @@ def verify_jar_version():
 
 def verify_changelog_version():
     """Verify changelog.md"""
-    CONFIG = Path(
-        "/home/scarf/.steam/steam/steamapps/common/SlayTheSpire/MarisaContinued/config.json"
-    ).read_text()
+    CONFIG = (STS / "MarisaContinued" / "config.json").read_text()
 
     assert VERSION in CONFIG
     assert VERSION in (BASE / "changelog.bbcode").read_text()
@@ -98,7 +98,6 @@ def github(ctx: Context):
 
 
 def steam(_: Context):
-    STS = Path("/home/scarf/Documents/SlayTheSpire/")
     COMMAND = "java -jar mod-uploader.jar upload -w MarisaContinued/".split(
         " "
     )
